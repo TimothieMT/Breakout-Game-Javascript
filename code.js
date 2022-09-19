@@ -19,7 +19,6 @@ let barX = (canvas.height - canvas.width) / 2
 const ball = () => {
     context.beginPath()
     context.arc(x, y, ballRadius, 0, Math.PI * 2)
-    context.lineWidth = 10
     context.fillStyle = "#79121A"
     context.fill()
     context.closePath()
