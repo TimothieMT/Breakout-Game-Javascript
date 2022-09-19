@@ -12,10 +12,29 @@ const ballRadius = 2
 const barHeight = 5
 const barWidht = 35
 let barX = (canvas.height - barWidht) / 2
+//Parameter der Steuerung
 let rightPress = false
 let leftPress = false
 
+//Funktion zum Zeichnen eines Balles
+const ball = () => {
+    context.beginPath()
+    context.arc(x, y, ballRadius, 0, Math.PI * 2)
+    context.fillStyle = "#79121A"
+    context.fill()
+    context.closePath()
+}
 
+//Funktion zum Zeichnen eines Balken
+const bar = () => {
+    context.beginPath()
+    context.rect(barX, canvas.height - barHeight, barWidht, barHeight)
+    context.fillStyle = "#53382F"
+    context.fill()
+    context.closePath()
+}
+
+//Steuerung des Balken mit Pfeiltasten
 const keyDownHandler = (element) => {
     if (element.key === "Right" || element.key === "ArrowRight") {
         rightPress = true
@@ -35,23 +54,7 @@ const keyUpHandler = (element) => {
 document.addEventListener("keydown", keyDownHandler, false)
 document.addEventListener("keyup", keyUpHandler, false)
 
-//Funktion zum Zeichnen eines Balles
-const ball = () => {
-    context.beginPath()
-    context.arc(x, y, ballRadius, 0, Math.PI * 2)
-    context.fillStyle = "#79121A"
-    context.fill()
-    context.closePath()
-}
-
-const bar = () => {
-    context.beginPath()
-    context.rect(barX, canvas.height - barHeight, barWidht, barHeight)
-    context.fillStyle = "#53382F"
-    context.fill()
-    context.closePath()
-}
-
+//Übertragung der Komponenten auf die Leinwand
 const draw = () => {
     context.clearRect(0, 0, canvas.width, canvas.height)
     ball()
@@ -65,12 +68,14 @@ const draw = () => {
         dy = -dy
    //Bewegung Balken
     if (rightPress) {
-        barX += 7
+        //Geschwindigkeit nach rechts
+        barX += 6
         if (barX + barWidht > canvas.width) {
             barX = canvas.width - barWidht
         }
     } else if (leftPress) {
-        barX -= 7
+        //Geschwindigkeit nach links
+        barX -= 6
         if (barX < 0) {
             barX = 0
         }
