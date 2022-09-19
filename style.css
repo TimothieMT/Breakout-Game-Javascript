@@ -12,21 +12,10 @@ h1 strong{
     padding-top: 40px;
 }
 
-#startBtn{
-    height: 50px;
-    width: 130px;
-    border-radius: 20px;
-    background: #8A6E37;
-    border: none;
-    font-weight: bolder;
-    display: table;
-    margin: 40px auto 0;
-}
-
 #mainCanvas {
     background: #8A6E37;
     display: block;
-    height: 420px;
-    width: 740px;
+    height: 400px;
+    width: 800px;
     margin: 100px auto 0;
 }
