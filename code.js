@@ -2,21 +2,92 @@
 const canvas = document.getElementById("mainCanvas")
 const context = canvas.getContext("2d")
 //Leinwand parameter
-let x = canvas.width / 2 // 150
-let y = canvas.height - 30 // 120
+let x = canvas.width  // 150
+let y = canvas.height  // 120
 let dx = 2
 let dy = -2
 //Ball parameter
 const ballRadius = 2
-//Balken parameter
+//Spielerbalken parameter
 const barHeight = 5
 const barWidht = 35
 let barX = (canvas.height - barWidht) / 2 // 57.5
 //Parameter der Steuerung
 let rightPress = false
 let leftPress = false
+//Zielbalken
+const brickRow = 15
+const brickColumn = 17
+const brickWidth = 15
+const brickHeight = 3
+const brickPadding = 2
+const brickSpaceTop = 14
+const brickSpaceLeft = 6
+let score = 0
 
-document.write(Math.PI * 2)
+
+//
+let brickList = [];
+for (let i = 0; i < brickColumn; i++) {
+    brickList[i] = []
+    for (let j = 0; j < brickRow; j++) {
+        brickList[i][j] = {x: 0, y: 0, status: 1}
+    }
+}
+
+//Kollisionsabfrage der Zielbalken
+const collision = () => {
+    for (let i = 0; i < brickColumn; i++) {
+        for (let j = 0; j < brickRow; j++) {
+            const brickStatus = brickList[i][j]
+            if (brickStatus.status === 1) {
+                if (
+                    x > brickStatus.x &&
+                    x < brickStatus.x + brickWidth &&
+                    y > brickStatus.y &&
+                    y < brickStatus.y + brickHeight
+                ){
+                    dy = -dy
+                    brickStatus.status = 0
+                    score++
+                    if (score === brickRow * brickColumn) {
+                        alert("Winner")
+                        document.location.reload()
+                        clearInterval(interval)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+const bricks = () => {
+    //Nested loop zum Generieren von balken
+    for (let i = 0; i < brickColumn; i++) {
+        for (let j = 0; j < brickRow; j++) {
+            //(i*(15 + 2)) + 6 => 17 Durchläufe
+            let X = (i * (brickWidth + brickPadding)) + brickSpaceLeft
+            //(j*(3 + 2)) + 6 => 17 Durchläufe
+            let Y = (j * (brickHeight + brickPadding)) + brickSpaceTop
+            brickList[i][j].x = X
+            brickList[i][j].y = Y
+            context.beginPath()
+            //X, Y, 15, 3
+            context.rect(X, Y, brickWidth, brickHeight)
+            context.fillStyle = "#B83A01"
+            context.fill()
+            context.closePath()
+        }
+    }
+}
+
+function highscore() {
+    context.font = "8px Arial"
+    context.fillStyle = "#000000"
+    context.fillText(`Score: ${score}`, 3, 9)
+}
+
 
 //canvas.height = 150
 //canvas.width = 300
@@ -63,12 +134,16 @@ document.addEventListener("keyup", keyUpHandler, false)
 const draw = () => {
     //0, 0, 150, 300
     context.clearRect(0, 0, canvas.width, canvas.height)
+    bricks()
     ball()
     bar()
+    highscore()
+    collision()
 
     //Kollision mit Wänden
     // 150 + 2 > 150 - 2 || 150 + 2 < 2
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+        //2 = -2
         dx = -dx
     }
 //GameOver
@@ -93,8 +168,8 @@ const draw = () => {
     //Bewegung Balken
     if (rightPress) {
         //Geschwindigkeit nach rechts
-        // 57.5 + 6
-        barX += 6
+        // 57.5 + 7
+        barX += 7
         //57.5 + 35 > 300
         if (barX + barWidht > canvas.width) {
             //57.5 = 300 - 35
@@ -102,8 +177,8 @@ const draw = () => {
         }
     } else if (leftPress) {
         //Geschwindigkeit nach links
-        // 57.5 - 6
-        barX -= 6
+        // 57.5 - 7
+        barX -= 7
         //57.5 < 0
         if (barX < 0) {
             //57.5 = 0
@@ -116,4 +191,4 @@ const draw = () => {
     y += dy
 }
 
-const interval = setInterval(draw, 20)
+const interval = setInterval(draw, 30)
