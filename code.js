@@ -27,7 +27,7 @@ let score = 0
 
 
 //
-let brickList = [];
+let brickList = []
 for (let i = 0; i < brickColumn; i++) {
     brickList[i] = []
     for (let j = 0; j < brickRow; j++) {
